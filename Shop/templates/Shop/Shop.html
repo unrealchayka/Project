@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    
+    <h1>Категории</h1>
+    
+    {%for c in category%}
+    <a href="#"><h1>{{c.name_categories}}</h1></a>
+
+    {%endfor%}
+
+    <h1>Бренды</h1>
+    <h1>{%for b in brand%}</h1>
+    <a href="#">{{b.brand}}</a>
+
+    {%endfor%}
+    {% for pro in product%}
+        <div class = 'ramka'>
+        <a href='{% url "product" pro.slug%}'>{{pro.title}}</a>
+        {{pro.price}}
+        <img class = 'imagestile' src="{{pro.image.url}}" width="100">
+        </div>
+    {% endfor %}
+    {% endblock %}
+</body>
+</html>

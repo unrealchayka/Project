@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/stile.css'%}" type="text/css">
+    
+    <title>Document</title>
+</head>
+<body>
+    <div class="div1">
+    <a class="tlink" href='{% url "home"%}'><h1>Home</h1></a>
+    {% if request.user.is_authenticated %}
+    <a class="tlink" href='{% url "profile"%}'><h1>Profile</h1></a>
+    {% endif %}
+    <a class="tlink" href='{% url "cart"%}'><h1>Cart</h1></a>
+    <a class="tlink" href='{% url "shop"%}'><h1>Shop</h1></a>
+    <a class="tlink" href='{% url "checkout" %}'><h1>Checkout</h1></a>
+    {% if request.user.is_authenticated %}
+    <a class="tlink"  href="{% url 'logout'%}"><h1>Logout</h1></a>
+    {% else %}
+    <a class="tlink" href="{% url 'login'%}"><h1>Login</h1></a>
+    {% endif %}
+    {% if request.user.is_staff %}
+    <a class="tlink" href="/admin"><h1>Admin</h1></a>
+    {% endif %}
+    </div>
+    <div class="globalfond">
+    {% block content %}
+    {% endblock content %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/stile.css'%}" type="text/css">
+    <title>Профиль</title>
+</head>
+<body>
+    {% block content %}
+    <div class = "stolb">
+    <h1>Ваш профиль</h1>
+    </div>
+            <div class="infoform">
+            <div class="profile">
+            <h1>{{ profile.first_name }}</h1>
+            <h1>{{ profile.last_name }}</h1>
+            <h1>{{ profile.social_network }}</h1>
+            <h1>{{ profile.email }}</h1> 
+        {% if profile.photo %}
+            <img class = 'imagestile'src="{{profile.photo.url}}" width="150">
+            </div>
+        {% endif %}
+        <div class="stileform">
+        <form method = 'post' enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submite">Сохранить</button>
+        </form> 
+        </div>
+        </div>
+    {% endblock %}
+</body>
+</html>

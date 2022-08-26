@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/stile.css'%}" type="text/css">
+    <title>Список всех товаров</title>
+</head>
+<body>
+    {% block content %}
+      
+    {% for i in product %}
+    <div class = "ramka">
+    <a class = "titlelink"href='{% url "product" i.slug%}'><h1>{{i.title}}</h1></a>
+    <h1>{{i.price}}</h1>
+    {% if i.image %}
+    <img class = 'imagestile' src="{{i.image.url}}" width="100">
+    {% endif %}
+    </div>  
+    {%endfor%}
+
+    {% endblock %}
+</body>
+</html>
