@@ -1,6 +1,6 @@
 venv
 *.pyc
-helptxt
+help.txt
 *~ 
 __pycache__ 
 myvenv 
