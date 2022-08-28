@@ -1,6 +1,9 @@
 from django.contrib import admin
-from .models import *
 from django.utils.safestring import mark_safe
+
+from .models import (Brand, Cart, Category, Checkout, Comment, CustomUser,
+                     Product, Rating, RatingStar, Tag)
+
 
 class ProductAdmin(admin.ModelAdmin):
     

@@ -6,12 +6,12 @@ from django.urls import reverse
 
 class CustomUser(AbstractUser):
     '''Пользователь'''
-    age = models.DateField('Дата рождений', blank = True, null = True)
-    social_network = models.CharField(max_length = 100, blank = True, null = True)
-    photo = models.ImageField(upload_to = 'owner/', default = 'defaultuesr.jpg')
+    age = models.DateField('Дата рождений', blank=True, null=True)
+    social_network = models.CharField(max_length=100, blank=True, null=True)
+    photo = models.ImageField(upload_to='owner/', default='defaultuesr.jpg')
 
     def get_absolute_url(self):
-        return reverse('owner', kwargs = {'pk' : self.pk})
+        return reverse('owner', kwargs={'pk' : self.pk})
         
     def __str__(self):
         return f'{self.username}'
@@ -19,12 +19,12 @@ class CustomUser(AbstractUser):
 
 class Category(models.Model):
     '''Категории товаров'''
-    title = models.CharField(max_length = 255,verbose_name = 'Категория')
-    slug = models.SlugField(max_length = 100,unique = True)
-    in_stock = models.BooleanField('На главную?', default = False)
+    title = models.CharField(max_length=255,verbose_name='Категория')
+    slug = models.SlugField(max_length=100,unique=True)
+    in_stock = models.BooleanField('На главную?', default=False)
 
     class Meta:
-        verbose_name  = 'Категория'
+        verbose_name = 'Категория'
         verbose_name_plural ='Категории'
 
     def __str__(self) -> str:
@@ -33,12 +33,12 @@ class Category(models.Model):
 
 class Tag(models.Model):
     '''Теги'''
-    title = models.CharField(max_length = 255,verbose_name = 'Название')
-    slug = models.SlugField(max_length = 255, unique = True)
-    in_stock = models.BooleanField('На главную?', default = False)
+    title = models.CharField(max_length=255,verbose_name='Название')
+    slug = models.SlugField(max_length=255, unique=True)
+    in_stock = models.BooleanField('На главную?', default=False)
 
     class Meta:
-        verbose_name  = 'Тег'
+        verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
 
     def __str__(self) -> str:
@@ -47,12 +47,12 @@ class Tag(models.Model):
 
 class Brand(models.Model):
     '''Бренд'''
-    title = models.CharField(max_length = 255, verbose_name = 'Название')
-    slug = models.SlugField(max_length = 100, unique = True)
-    in_stock= models.BooleanField('На главную?',default = False)
+    title = models.CharField(max_length=255, verbose_name='Название')
+    slug = models.SlugField(max_length=100, unique=True)
+    in_stock= models.BooleanField('На главную?', default=False)
 
     class Meta:
-        verbose_name  = 'Бренд'
+        verbose_name = 'Бренд'
         verbose_name_plural = 'Бренды'
 
     def __str__(self):
@@ -60,27 +60,26 @@ class Brand(models.Model):
 
 
 class Product(models.Model):
-    '''Тоавры'''
-
-    title = models.CharField(max_length = 255, verbose_name = 'Товар')
-    description = models.TextField(max_length = 1024, verbose_name = 'Описание')
-    category = models.ForeignKey(Category, on_delete = models.SET_NULL, null = True, verbose_name = 'Категория товара')
-    tags = models.ManyToManyField(Tag, verbose_name = 'Теги')
-    price = models.DecimalField('Цена', max_digits = 10, decimal_places = 2)
-    discount = models.SmallIntegerField('Скидка', blank = True, default = 0,validators = [MaxValueValidator(100)])
-    pub_date = models.DateField('Дата обновления', auto_now = True)
-    create = models.DateField('Дата создания', auto_now_add = True)
-    quantity = models.PositiveSmallIntegerField(default= 0, verbose_name = 'Количество товаров в наличии')
-    image = models.ImageField(upload_to = 'product/%Y/%m/%d/', blank = True, verbose_name = 'Основное фото')
-    brand = models.ForeignKey(Brand, on_delete = models.SET_NULL, null = True, verbose_name = 'Бренд')
-    slug = models.SlugField(max_length = 255)
-    in_stock= models.BooleanField('На главную?', default = False)
+    '''Товары'''
+    title = models.CharField(max_length=255, verbose_name='Товар')
+    description = models.TextField(max_length=1024, verbose_name='Описание')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name='Категория товара')
+    tags = models.ManyToManyField(Tag, verbose_name='Теги')
+    price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
+    discount = models.SmallIntegerField('Скидка', blank=True, default=0,validators=[MaxValueValidator(100)])
+    pub_date = models.DateField('Дата обновления', auto_now=True)
+    create = models.DateField('Дата создания', auto_now_add=True)
+    quantity = models.PositiveSmallIntegerField(default=0, verbose_name='Количество товаров в наличии')
+    image = models.ImageField(upload_to='product/%Y/%m/%d/', blank=True, verbose_name='Основное фото')
+    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, verbose_name='Бренд')
+    slug = models.SlugField(max_length=255)
+    in_stock= models.BooleanField('На главную?', default=False)
 
     def get_absolute_url(self):
-        return reverse('product', kwargs = {'slug' : self.slug})
+        return reverse('product', kwargs={'slug' : self.slug})
 
     class Meta:
-        verbose_name  = 'Товар'
+        verbose_name = 'Товар'
         verbose_name_plural ='Товары'
 
     def __str__(self) -> str:
@@ -89,7 +88,7 @@ class Product(models.Model):
 
 class RatingStar(models.Model):
     '''Звезда рейтинга'''
-    value = models.SmallIntegerField('Значение', default = 0)
+    value = models.SmallIntegerField('Значение', default=0)
 
     def __str__(self):
         return f'{self.value}'
@@ -102,9 +101,9 @@ class RatingStar(models.Model):
 
 class Rating(models.Model):
     '''Рейтинг'''
-    user = models.ForeignKey(CustomUser, verbose_name = 'Пользователь', on_delete = models.CASCADE, default = None, related_name = 'rating')
-    star = models.ForeignKey(RatingStar, on_delete = models.CASCADE, verbose_name ='Звезда', default = None)
-    product = models.ForeignKey(Product, on_delete = models.CASCADE, verbose_name = 'Товар')
+    user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE, default=None, related_name='rating')
+    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name='Звезда', default=None)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
 
     def __str__(self):
         return f'star=> {self.star}  product=> {self.product}  user=> {self.user}'
@@ -116,11 +115,11 @@ class Rating(models.Model):
 
 class Comment(models.Model):
     '''Коментарии'''
-    user = models.ForeignKey(CustomUser, on_delete = models.CASCADE,verbose_name = 'Пользователь', related_name = 'user_comment')
-    product = models.ForeignKey(Product, on_delete = models.CASCADE,
-                    verbose_name = 'Новость', null = True,
-                    blank = True, related_name = 'user_comment')
-    create = models.DateTimeField('Время добавления коментария', auto_now_add = True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,verbose_name='Пользователь', related_name='user_comment')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,
+                    verbose_name='Новость', null=True,
+                    blank=True, related_name='user_comment')
+    create = models.DateTimeField('Время добавления коментария', auto_now_add=True)
     text = models.TextField('Коментарий')
 
     class Meta:
@@ -130,10 +129,10 @@ class Comment(models.Model):
 
 class Cart(models.Model):
     '''Корзина'''
-    user = models.ForeignKey(CustomUser, verbose_name = 'Пользователь', on_delete = models.CASCADE, related_name = 'cart')
-    products = models.ForeignKey(Product, on_delete = models.CASCADE, verbose_name = 'Твоар')
-    create = models.DateTimeField(auto_now_add = True)  
-    quantit= models.IntegerField(
+    user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE, related_name='cart')
+    products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Твоар')
+    create = models.DateTimeField(auto_now_add=True)  
+    quantit = models.IntegerField(
         default=1,
         validators=[
             MaxValueValidator(100),
@@ -145,7 +144,7 @@ class Cart(models.Model):
             return f'{self.user} {self.products}'
 
     class Meta:
-        verbose_name  = 'Корзина'
+        verbose_name = 'Корзина'
         verbose_name_plural ='Корзины'
 
 
@@ -157,10 +156,10 @@ class Checkout(models.Model):
     )
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ManyToManyField(Product)
-    addreses = models.CharField(max_length = 255)
-    town = models.CharField(max_length = 255)
-    comment = models.TextField(max_length = 1500, null = True, blank = True)
-    payment = models.CharField(max_length = 20, choices = CHOICE_PAYMENT)
+    addreses = models.CharField(max_length=255)
+    town = models.CharField(max_length=255)
+    comment = models.TextField(max_length=1500, null=True, blank=True)
+    payment = models.CharField(max_length=20, choices=CHOICE_PAYMENT)
 
     class Meta:
         verbose_name = 'Заказ'

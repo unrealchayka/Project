@@ -2,46 +2,31 @@ from email.policy import default
 from urllib import request
 from rest_framework import serializers
 
-from .models import *
+from .models import (Cart, Comment, CustomUser,
+                     Product, Rating)
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(slug_field='title', read_only=True)
+    brand = serializers.SlugRelatedField(slug_field='title', read_only=True)
+    tags = serializers.SlugRelatedField(slug_field='title', read_only=True, many=True)
 
     class Meta:
         model = Product
-        fields = ('id', 'title', 'category')
-    # owner = serializers.HiddenField(default = serializers.CurrentUserDefault())
-    category = serializers.SlugRelatedField(slug_field='title', read_only=True)
-    # brand = serializers.SlugRelatedField(slug_field='brand', read_only=True)
-    # color = serializers.SlugRelatedField(slug_field='color', read_only=True)
-    # tags = serializers.SlugRelatedField(slug_field='tags', read_only = True, many = True)
-    # photo = serializers.SlugRelatedField(slug_field='photo', read_only =True)
+        fields = ('id', 'title', 'category', 'brand', 'tags')
 
-    # def create(self, validated_data):
-    #     return super().create(validated_data)
-
-    # def update(self, instance, validated_data):
-    #     return super().update(instance, validated_data)
 
 class DetailProductSerializer(serializers.ModelSerializer):
-    
+    category = serializers.SlugRelatedField(slug_field='title', read_only=True)
+    brand = serializers.SlugRelatedField(slug_field='title', read_only=True)
+    tags = serializers.SlugRelatedField(slug_field='title', read_only=True, many=True)
 
-    # owner = serializers.SlugRelatedField(slug_field='username', read_only = True)
-    # categories = serializers.SlugRelatedField(slug_field='name_categories', read_only=True)
-    # brand = serializers.SlugRelatedField(slug_field='brand', read_only=True)
-    # tags = serializers.SlugRelatedField(slug_field='tags', read_only = True, many = True)
-    # photo = serializers.SlugRelatedField(slug_field='photo', read_only =True)
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ('__all__')
 
 
 class CommentSerializer(serializers.ModelSerializer):
-
-    # user = serializers.HiddenField(default = serializers.CurrentUserDefault())
-    # user = serializers.SlugRelatedField(slug_field = 'username', read_only = True)
-    # product = serializers.SlugRelatedField(slug_field='title', read_only = True)
-
 
     class Meta:
         model = Comment

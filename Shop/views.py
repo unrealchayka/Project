@@ -1,16 +1,15 @@
-from django.db.models import Q
 from datetime import datetime, timedelta
 
-from .models import *
-from .forms import *
-
-from django.shortcuts import render, redirect
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
+
+from .forms import CartForm, CastomUserForm, RatingForm
+from .models import Cart, Comment, CustomUser, Product, Rating
 
 
 class ProfileView(View):
     '''Личный кабинет пользователя'''
-
     def get(self, request):
         profile = CustomUser.objects.get(id = request.user.id)
         form = CastomUserForm(instance = request.user)
@@ -44,16 +43,23 @@ class CartView(View):
         cart = Cart.objects.filter(user_id = request.user.id)
         return render(request, 'Shop/Cart.html', locals())
 
-    def post(self, request):
-        Cart.objects.get_or_create(user_id = request.user.id,
-            products = request.POST.get('products'),
-            quantit = request.POST.get('quantit'))
-        return redirect(CartView)
+
+class AddCart(View):
+    '''Добавление товара в корзину'''
+    def post(self, request, **kwargs):
+        product = get_object_or_404(Product, id=self.kwargs['pk'])
+        Cart.objects.get_or_create(products=product, user_id=request.user.id, defaults={'quantit':kwargs['quantit']})
+
+
+class DelCart(View):
+    '''Удаление товара из корзины'''
+    def post(self, request, **kwargs):
+        cart = get_object_or_404(Cart, products_id=self.kwargs['pk'], user_id=request.user.id)
+        cart.delete()
 
 
 class HomeView(View):
     '''Домашняя страница'''
-
     def get(self, request):
         product = Product.objects.filter(in_stock = True)
         return render(request, 'Shop/Home.html', locals())
@@ -61,7 +67,6 @@ class HomeView(View):
 
 class ProductView(View):
     ''''Подробное описание товара'''
-
     def get(self, request, slug):
         product = Product.objects.select_related('category', 'brand',).get(slug = slug)
         comment = Comment.objects.filter(product__slug = slug).select_related('user', 'product')
@@ -72,7 +77,6 @@ class ProductView(View):
 
 class ShopView(View):
     '''Список товаров и фильтрация'''
-
     def get(self, request, pk = None):
         product  = Product.objects.all()
         if pk == 1:
@@ -82,11 +86,18 @@ class ShopView(View):
         return render(request, 'Shop/Shop.html', locals())
 
 
+class AddRating(View):
+    '''Добавление и изменение рейтинга к товару'''
+    def post(self, requset, **kwargs):
+        Rating.objects.get_or_create(
+            user_id=requset.user.id, product_id=kwargs['pk'],
+            defaults={'star':requset.POST.get('star')})
+        
+
+
 class FilterShopView(View):
     '''Фильтрация товаров'''
-
     def get(self, request, pk = None):
-
         product  = Product.objects.filter(
             Q(categories = request.GET.get('categories'))| 
             Q(brand = request.GET.get('brand'))|
@@ -95,20 +106,3 @@ class FilterShopView(View):
             newest = datetime.now() - timedelta(minutes = 60 * 24 * 7)
             product = product.filter(create__gte = newest)
         return render (request, 'Shop/Shop.html', locals())
-
-
-class CheckoutView(View):
-    '''Оформление заказа'''
-    def get(self, request):
-        form = CheckoutForm()
-        return render(request, 'Shop/Checkout.html', locals())
-        
-    def post(self, request):
-        form = CheckoutForm(request.POST)
-        if form.is_valid():
-            form.save(commit=False)
-            form.instance.user = request.user
-            form.save()
-            return redirect('profile')
-        else:
-            form = CheckoutForm()
