@@ -22,7 +22,6 @@ class ProfileAPIView(APIView):
             instance = CustomUser.objects.get(id = request.user.id)
         except:
             return Response({'error': 'user not exist'})
-
         serializers = UserSerializer(data = request.data, instance = instance, context = {'request' : request})
         serializers.is_valid(raise_exception = True)
         serializers.save()
