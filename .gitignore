@@ -3,5 +3,3 @@ venv
 help.txt
 *~ 
 __pycache__ 
-myvenv 
-db.sqlite3 
